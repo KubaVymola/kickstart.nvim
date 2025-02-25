@@ -27,6 +27,33 @@ return {
       --   },
       -- },
 
+      completion = {
+        menu = {
+          draw = {
+            columns = { { 'kind_icon', 'label', gap = 1 }, { 'label_description' } },
+            components = {
+              label = {
+                width = { fill = true, max = 60 },
+                text = function(ctx)
+                  return ctx.label .. ctx.label_detail
+                end,
+              },
+            },
+          },
+        },
+        documentation = {
+          auto_show = true,
+          auto_show_delay_ms = 300,
+          update_delay_ms = 150,
+        },
+      },
+
+      -- completion.menu.draw.columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind" } }
+
+      -- completion = {
+      --
+      -- }
+
       -- Default list of enabled providers defined so that you can extend it
       -- elsewhere in your config, without redefining it, due to `opts_extend`
       sources = {
@@ -34,7 +61,7 @@ return {
         min_keyword_length = function(ctx)
           -- only applies when typing a command, doesn't apply to arguments
           if ctx.mode == 'cmdline' and string.find(ctx.line, ' ') == nil then
-            return 3
+            return 2
           end
           return 0
         end,

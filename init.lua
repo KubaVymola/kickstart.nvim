@@ -90,7 +90,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -131,7 +131,7 @@ vim.opt.smartcase = true
 vim.opt.signcolumn = 'yes'
 
 -- Decrease update time
-vim.opt.updatetime = 250
+vim.opt.updatetime = 400
 
 -- Decrease mapped sequence wait time
 vim.opt.timeoutlen = 300
@@ -155,6 +155,16 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
+vim.o.expandtab = true
+vim.o.smartindent = true
+vim.o.tabstop = 4
+vim.o.shiftwidth = 4
+
+vim.opt.spelllang = 'en,cs'
+vim.opt.spell = true
+
+-- TODO tset this version
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -173,7 +183,7 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
-vim.keymap.set('i', 'jj', '<ESC>', { silent = true })
+-- vim.keymap.set('i', 'jj', '<ESC>', { silent = true })
 
 -- TIP: Disable arrow keys in normal mode
 vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
@@ -190,6 +200,8 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 vim.keymap.set('n', '|', '<cmd>vsplit<CR>', { desc = 'Split current window vertically' })
+
+vim.api.nvim_set_keymap('n', '<leader>l', ':ls<CR>:b<space>', { desc = 'fly to buffer' })
 
 vim.api.nvim_create_user_command('CopyRelPath', "call setreg('+', expand('%'))", {})
 
@@ -420,6 +432,10 @@ require('lazy').setup({
             '--glob=!**/yarn.lock',
             '--glob=!**/package-lock.json',
             '--glob=!**/node_modules',
+            '--glob=!**/postgres-data',
+            '--glob=!**/coverage',
+            '--glob=!**/.turbo',
+            '--glob=!**/*.log*',
           },
         },
         pickers = {
@@ -441,6 +457,9 @@ require('lazy').setup({
               '--glob=!**/package-lock.json',
               '--glob=!**/node_modules',
               '--glob=!**/postgres-data',
+              '--glob=!**/coverage',
+              '--glob=!**/.turbo',
+              '--glob=!**/*.log*',
             },
           },
         },
@@ -460,14 +479,21 @@ require('lazy').setup({
       local builtin = require 'telescope.builtin'
       vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Search [H]elp' })
       vim.keymap.set('n', '<leader>fk', builtin.keymaps, { desc = 'Search [K]eymaps' })
-      vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Search [F]iles' })
+      vim.keymap.set('n', '<leader>ff', function()
+        builtin.find_files { path_display = { truncate = 3 } }
+      end, { desc = 'Search [F]iles' })
       vim.keymap.set('n', '<leader>fs', builtin.builtin, { desc = 'Search Select Telescope' })
       vim.keymap.set('n', '<leader>fw', builtin.grep_string, { desc = 'Search current [W]ord' })
-      vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Search by [G]rep' })
+      vim.keymap.set('n', '<leader>fg', function()
+        builtin.live_grep { path_display = { truncate = 3 } }
+      end, { desc = 'Search by [G]rep' })
       vim.keymap.set('n', '<leader>fd', builtin.diagnostics, { desc = 'Search [D]iagnostics' })
       vim.keymap.set('n', '<leader>fr', builtin.resume, { desc = 'Search [R]esume' })
       vim.keymap.set('n', '<leader>f.', builtin.oldfiles, { desc = 'Search Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '<leader>fm', function()
+        builtin.marks { path_display = { truncate = 3 } }
+      end, { desc = 'Search [M]arks' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -598,7 +624,27 @@ require('lazy').setup({
 
           -- Rename the variable under your cursor.
           --  Most Language Servers support renaming across files, etc.
-          map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+          map('<leader>rn', function()
+            local cmdId
+            cmdId = vim.api.nvim_create_autocmd({ 'CmdlineEnter' }, {
+              callback = function()
+                local key = vim.api.nvim_replace_termcodes('<C-f>', true, false, true)
+                vim.api.nvim_feedkeys(key, 'c', false)
+                vim.api.nvim_feedkeys('0', 'n', false)
+                -- autocmd was triggered and so we can remove the ID and return true to delete the autocmd
+                cmdId = nil
+                return true
+              end,
+            })
+            vim.lsp.buf.rename()
+            -- if LPS couldn't trigger rename on the symbol, clear the autocmd
+            vim.defer_fn(function()
+              -- the cmdId is not nil only if the LSP failed to rename
+              if cmdId then
+                vim.api.nvim_del_autocmd(cmdId)
+              end
+            end, 500)
+          end, '[R]e[n]ame')
 
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
@@ -691,6 +737,8 @@ require('lazy').setup({
         ts_ls = {},
         eslint = {},
         jsonls = {},
+
+        prismals = {},
 
         tailwindcss = {},
         svelte = {},
@@ -926,6 +974,7 @@ require('lazy').setup({
 
       vim.api.nvim_set_hl(0, 'LineNr', { fg = 'gray' })
       vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', { fg = 'gray' })
+      vim.api.nvim_set_hl(0, 'TreesitterContextLineNumber', { fg = 'gray' })
     end,
   },
 
@@ -1004,7 +1053,7 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  require 'kickstart.plugins.indent_line',
+  -- require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
