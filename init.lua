@@ -427,6 +427,7 @@ require('lazy').setup({
             '--glob=!**/.git/*',
             '--glob=!**/.idea/*',
             '--glob=!**/.vscode/*',
+            '--glob=!**/.cache/*',
             '--glob=!**/build/*',
             '--glob=!**/dist/*',
             '--glob=!**/yarn.lock',
@@ -451,6 +452,7 @@ require('lazy').setup({
               '--glob=!**/.git/*',
               '--glob=!**/.idea/*',
               '--glob=!**/.vscode/*',
+              '--glob=!**/.cache/*',
               '--glob=!**/build/*',
               '--glob=!**/dist/*',
               '--glob=!**/yarn.lock',
@@ -490,7 +492,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>fd', builtin.diagnostics, { desc = 'Search [D]iagnostics' })
       vim.keymap.set('n', '<leader>fr', builtin.resume, { desc = 'Search [R]esume' })
       vim.keymap.set('n', '<leader>f.', builtin.oldfiles, { desc = 'Search Recent Files ("." for repeat)' })
-      vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = '[ ] Find existing buffers' })
       vim.keymap.set('n', '<leader>fm', function()
         builtin.marks { path_display = { truncate = 3 } }
       end, { desc = 'Search [M]arks' })
@@ -734,6 +736,8 @@ require('lazy').setup({
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
 
+        clangd = {},
+
         ts_ls = {},
         eslint = {},
         jsonls = {},
@@ -741,7 +745,18 @@ require('lazy').setup({
         prismals = {},
 
         tailwindcss = {},
-        svelte = {},
+
+        jedi_language_server = {},
+
+        postgres_lsp = {},
+
+        svelte = {
+          -- root_dir = require('lspconfig.util').root_pattern '.git',
+        },
+
+        astro = {},
+
+        azure_pipelines_ls = {},
 
         lua_ls = {
           -- cmd = { ... },
@@ -775,6 +790,12 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'prettier',
+        'prettierd',
+        'prisma-language-server',
+        'svelte-language-server',
+        'tailwindcss-language-server',
+        'azure-pipelines-language-server',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -821,7 +842,7 @@ require('lazy').setup({
           lsp_format_opt = 'fallback'
         end
         return {
-          timeout_ms = 500,
+          timeout_ms = 2500,
           lsp_format = lsp_format_opt,
         }
       end,
@@ -833,6 +854,7 @@ require('lazy').setup({
         -- You can use 'stop_after_first' to run the first available formatter from the list
         javascript = { 'prettierd', 'prettier', stop_after_first = true },
         typescript = { 'prettierd', 'prettier', stop_after_first = true },
+        astro = { 'prettierd', 'prettier', stop_after_first = true },
       },
     },
   },
@@ -1024,7 +1046,7 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'json' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -1092,5 +1114,13 @@ require('lazy').setup({
   },
 })
 
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'c', 'cpp' },
+  callback = function()
+    vim.bo.tabstop = 4
+    vim.bo.shiftwidth = 4
+    vim.bo.expandtab = true
+  end,
+})
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
