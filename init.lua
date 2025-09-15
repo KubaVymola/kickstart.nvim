@@ -412,6 +412,14 @@ require('lazy').setup({
         --   },
         -- },
         defaults = {
+          mappings = {
+            i = {
+              ['<C-d>'] = require('telescope.actions').delete_buffer, -- in insert mode
+            },
+            n = {
+              ['<C-d>'] = require('telescope.actions').delete_buffer, -- in normal mode
+            },
+          },
           -- configure to use ripgrep
           vimgrep_arguments = {
             'rg',
@@ -514,6 +522,8 @@ require('lazy').setup({
           prompt_title = 'Live Grep in Open Files',
         }
       end, { desc = 'Search [/] in Open Files' })
+
+      -- vim.keymap.set('n', '<C-d>', require('telescope.actions').delete_buffer)
 
       -- Shortcut for searching your Neovim configuration files
       vim.keymap.set('n', '<leader>fn', function()
