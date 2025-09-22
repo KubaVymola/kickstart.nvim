@@ -89,8 +89,13 @@ return {
         -- end,
         gemini = function()
           return require('codecompanion.adapters').extend('gemini', {
+            url = 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
             env = {
               api_key = 'cmd:cat ~/.gemini-key-local',
+            },
+            headers = {
+              Authorization = 'Bearer ${api_key}',
+              ['Content-Type'] = 'application/json',
             },
           })
         end,
@@ -183,7 +188,10 @@ return {
     },
     strategies = {
       chat = {
-        adapter = 'gemini',
+        adapter = {
+          name = 'gemini',
+          model = 'gemini-2.5-pro',
+        },
         keymaps = {
           send = {
             modes = {
