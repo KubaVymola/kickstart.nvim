@@ -63,100 +63,102 @@ return {
       -- },
     },
     adapters = {
-      -- anthropic = function()
-      --   return require("codecompanion.adapters").extend("anthropic", {
-      --     env = {
-      --       api_key = "cmd:op read op://personal/Anthropic_API/credential --no-newline",
-      --     },
-      --   })
-      -- end,
-      -- copilot = function()
-      --   return require("codecompanion.adapters").extend("copilot", {
-      --     schema = {
-      --       model = {
-      --         default = "gemini-2.5-pro",
-      --       },
-      --     },
-      --   })
-      -- end,
-      -- deepseek = function()
-      --   return require("codecompanion.adapters").extend("deepseek", {
-      --     env = {
-      --       api_key = "cmd:op read op://personal/DeepSeek_API/credential --no-newline",
-      --     },
-      --   })
-      -- end,
-      -- gemini = function()
-      --   return require("codecompanion.adapters").extend("gemini", {
-      --     env = {
-      --       api_key = "cmd:op read op://personal/Gemini_API/credential --no-newline",
-      --     },
-      --   })
-      -- end,
-      -- mistral = function()
-      --   return require("codecompanion.adapters").extend("mistral", {
-      --     env = {
-      --       api_key = "cmd:op read op://personal/Mistral_API/credential --no-newline",
-      --     },
-      --   })
-      -- end,
-      -- novita = function()
-      --   return require("codecompanion.adapters").extend("novita", {
-      --     env = {
-      --       api_key = "cmd:op read op://personal/Novita_API/credential --no-newline",
-      --     },
-      --     schema = {
-      --       model = {
-      --         default = function()
-      --           return "meta-llama/llama-3.1-8b-instruct"
-      --         end,
-      --       },
-      --     },
-      --   })
-      -- end,
-      -- ollama = function()
-      --   return require("codecompanion.adapters").extend("ollama", {
-      --     schema = {
-      --       model = {
-      --         default = "llama3.1:latest",
-      --       },
-      --       num_ctx = {
-      --         default = 20000,
-      --       },
-      --     },
-      --   })
-      -- end,
-      -- openai = function()
-      --   return require("codecompanion.adapters").extend("openai", {
-      --     opts = {
-      --       stream = true,
-      --     },
-      --     env = {
-      --       api_key = "cmd:op read op://personal/OpenAI_API/credential --no-newline",
-      --     },
-      --     schema = {
-      --       model = {
-      --         default = function()
-      --           return "gpt-4.1"
-      --         end,
-      --       },
-      --     },
-      --   })
-      -- end,
-      -- xai = function()
-      --   return require("codecompanion.adapters").extend("xai", {
-      --     env = {
-      --       api_key = "cmd:op read op://personal/xAI_API/credential --no-newline",
-      --     },
-      --   })
-      -- end,
-      -- tavily = function()
-      --   return require("codecompanion.adapters").extend("tavily", {
-      --     env = {
-      --       api_key = "cmd:op read op://personal/Tavily_API/credential --no-newline",
-      --     },
-      --   })
-      -- end,
+      http = {
+        -- anthropic = function()
+        --   return require("codecompanion.adapters").extend("anthropic", {
+        --     env = {
+        --       api_key = "cmd:op read op://personal/Anthropic_API/credential --no-newline",
+        --     },
+        --   })
+        -- end,
+        -- copilot = function()
+        --   return require("codecompanion.adapters").extend("copilot", {
+        --     schema = {
+        --       model = {
+        --         default = "gemini-2.5-pro",
+        --       },
+        --     },
+        --   })
+        -- end,
+        -- deepseek = function()
+        --   return require("codecompanion.adapters").extend("deepseek", {
+        --     env = {
+        --       api_key = "cmd:op read op://personal/DeepSeek_API/credential --no-newline",
+        --     },
+        --   })
+        -- end,
+        gemini = function()
+          return require('codecompanion.adapters').extend('gemini', {
+            env = {
+              api_key = 'cmd:cat ~/.gemini-key-local',
+            },
+          })
+        end,
+        -- mistral = function()
+        --   return require("codecompanion.adapters").extend("mistral", {
+        --     env = {
+        --       api_key = "cmd:op read op://personal/Mistral_API/credential --no-newline",
+        --     },
+        --   })
+        -- end,
+        -- novita = function()
+        --   return require("codecompanion.adapters").extend("novita", {
+        --     env = {
+        --       api_key = "cmd:op read op://personal/Novita_API/credential --no-newline",
+        --     },
+        --     schema = {
+        --       model = {
+        --         default = function()
+        --           return "meta-llama/llama-3.1-8b-instruct"
+        --         end,
+        --       },
+        --     },
+        --   })
+        -- end,
+        -- ollama = function()
+        --   return require("codecompanion.adapters").extend("ollama", {
+        --     schema = {
+        --       model = {
+        --         default = "llama3.1:latest",
+        --       },
+        --       num_ctx = {
+        --         default = 20000,
+        --       },
+        --     },
+        --   })
+        -- end,
+        -- openai = function()
+        --   return require("codecompanion.adapters").extend("openai", {
+        --     opts = {
+        --       stream = true,
+        --     },
+        --     env = {
+        --       api_key = "cmd:op read op://personal/OpenAI_API/credential --no-newline",
+        --     },
+        --     schema = {
+        --       model = {
+        --         default = function()
+        --           return "gpt-4.1"
+        --         end,
+        --       },
+        --     },
+        --   })
+        -- end,
+        -- xai = function()
+        --   return require("codecompanion.adapters").extend("xai", {
+        --     env = {
+        --       api_key = "cmd:op read op://personal/xAI_API/credential --no-newline",
+        --     },
+        --   })
+        -- end,
+        -- tavily = function()
+        --   return require("codecompanion.adapters").extend("tavily", {
+        --     env = {
+        --       api_key = "cmd:op read op://personal/Tavily_API/credential --no-newline",
+        --     },
+        --   })
+        -- end,
+      },
     },
     prompt_library = {
       -- ['Test workflow'] = {
@@ -181,10 +183,7 @@ return {
     },
     strategies = {
       chat = {
-        adapter = 'copilot',
-        roles = {
-          user = 'kubavymola',
-        },
+        adapter = 'gemini',
         keymaps = {
           send = {
             modes = {
@@ -235,7 +234,7 @@ return {
           },
         },
       },
-      inline = { adapter = 'copilot' },
+      inline = { adapter = 'gemini' },
     },
     display = {
       action_palette = {
@@ -246,8 +245,60 @@ return {
         -- show_header_separator = false,
         -- show_settings = false,
       },
-      diff = {
-        provider = 'mini_diff',
+    },
+    diff = {
+      enabled = true,
+      provider = 'inline', -- mini_diff|split|inline
+
+      provider_opts = {
+        -- Options for inline diff provider
+        inline = {
+          layout = 'float', -- float|buffer - Where to display the diff
+
+          diff_signs = {
+            signs = {
+              text = '▌', -- Sign text for normal changes
+              reject = '✗', -- Sign text for rejected changes in super_diff
+              highlight_groups = {
+                addition = 'DiagnosticOk',
+                deletion = 'DiagnosticError',
+                modification = 'DiagnosticWarn',
+              },
+            },
+            -- Super Diff options
+            icons = {
+              accepted = ' ',
+              rejected = ' ',
+            },
+            colors = {
+              accepted = 'DiagnosticOk',
+              rejected = 'DiagnosticError',
+            },
+          },
+
+          opts = {
+            context_lines = 3, -- Number of context lines in hunks
+            dim = 25, -- Background dim level for floating diff (0-100, [100 full transparent], only applies when layout = "float")
+            full_width_removed = true, -- Make removed lines span full width
+            show_keymap_hints = true, -- Show "gda: accept | gdr: reject" hints above diff
+            show_removed = true, -- Show removed lines as virtual text
+          },
+        },
+
+        -- Options for the split provider
+        split = {
+          close_chat_at = 240, -- Close an open chat buffer if the total columns of your display are less than...
+          layout = 'vertical', -- vertical|horizontal split
+          opts = {
+            'internal',
+            'filler',
+            'closeoff',
+            'algorithm:histogram', -- https://adamj.eu/tech/2024/01/18/git-improve-diff-histogram/
+            'indent-heuristic', -- https://blog.k-nut.eu/better-git-diffs
+            'followwrap',
+            'linematch:120',
+          },
+        },
       },
     },
     opts = {
