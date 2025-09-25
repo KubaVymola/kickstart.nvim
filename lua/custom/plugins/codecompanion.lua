@@ -242,7 +242,12 @@ return {
           },
         },
       },
-      inline = { adapter = 'gemini' },
+      inline = {
+        adapter = {
+          name = 'gemini',
+          model = 'gemini-2.5-pro',
+        },
+      },
     },
     display = {
       action_palette = {
