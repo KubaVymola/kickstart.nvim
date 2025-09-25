@@ -679,31 +679,29 @@ require('lazy').setup({
           --  Similar to document symbols, except searches over your entire project.
           map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
-          map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-
           -- Rename the variable under your cursor.
           --  Most Language Servers support renaming across files, etc.
-          -- map('<leader>rn', function()
-          --   local cmdId
-          --   cmdId = vim.api.nvim_create_autocmd({ 'CmdlineEnter' }, {
-          --     callback = function()
-          --       local key = vim.api.nvim_replace_termcodes('<C-f>', true, false, true)
-          --       vim.api.nvim_feedkeys(key, 'c', false)
-          --       vim.api.nvim_feedkeys('0', 'n', false)
-          --       -- autocmd was triggered and so we can remove the ID and return true to delete the autocmd
-          --       cmdId = nil
-          --       return true
-          --     end,
-          --   })
-          --   vim.lsp.buf.rename()
-          --   -- if LPS couldn't trigger rename on the symbol, clear the autocmd
-          --   vim.defer_fn(function()
-          --     -- the cmdId is not nil only if the LSP failed to rename
-          --     if cmdId then
-          --       vim.api.nvim_del_autocmd(cmdId)
-          --     end
-          --   end, 500)
-          -- end, '[R]e[n]ame')
+          map('<leader>rn', function()
+            local cmdId
+            cmdId = vim.api.nvim_create_autocmd({ 'CmdlineEnter' }, {
+              callback = function()
+                local key = vim.api.nvim_replace_termcodes('<C-f>', true, false, true)
+                vim.api.nvim_feedkeys(key, 'c', false)
+                vim.api.nvim_feedkeys('0', 'n', false)
+                -- autocmd was triggered and so we can remove the ID and return true to delete the autocmd
+                cmdId = nil
+                return true
+              end,
+            })
+            vim.lsp.buf.rename()
+            -- if LPS couldn't trigger rename on the symbol, clear the autocmd
+            vim.defer_fn(function()
+              -- the cmdId is not nil only if the LSP failed to rename
+              if cmdId then
+                vim.api.nvim_del_autocmd(cmdId)
+              end
+            end, 500)
+          end, '[R]e[n]ame')
 
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
@@ -718,13 +716,13 @@ require('lazy').setup({
           ---@param method vim.lsp.protocol.Method
           ---@param bufnr? integer some lsp support methods only in specific files
           ---@return boolean
-          -- local function client_supports_method(client, method, bufnr)
-          --   if vim.fn.has 'nvim-0.11' == 1 then
-          --     return client:supports_method(method, bufnr)
-          --   else
-          --     return client.supports_method(method, { bufnr = bufnr })
-          --   end
-          -- end
+          local function client_supports_method(client, method, bufnr)
+            if vim.fn.has 'nvim-0.11' == 1 then
+              return client:supports_method(method, bufnr)
+            else
+              return client.supports_method(method, { bufnr = bufnr })
+            end
+          end
 
           -- The following two autocommands are used to highlight references of the
           -- word under your cursor when your cursor rests there for a little while.
@@ -866,12 +864,6 @@ require('lazy').setup({
         },
       }
 
-      for server_name, config in pairs(servers) do
-        config.capabilities = vim.tbl_deep_extend('force', {}, capabilities, config.capabilities or {})
-        vim.lsp.config(server_name, config)
-        vim.lsp.enable(server_name)
-      end
-
       -- Ensure the servers and tools above are installed
       --
       -- To check the current status of installed tools and/or manually install
@@ -897,20 +889,26 @@ require('lazy').setup({
       })
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
-      require('mason-lspconfig').setup {
-        ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-        automatic_installation = false,
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for ts_ls)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
-      }
+      -- require('mason-lspconfig').setup {
+      --   ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
+      --   automatic_installation = false,
+      --   handlers = {
+      --     function(server_name)
+      --       local server = servers[server_name] or {}
+      --       -- This handles overriding only values explicitly passed
+      --       -- by the server configuration above. Useful when disabling
+      --       -- certain features of an LSP (for example, turning off formatting for ts_ls)
+      --       server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+      --       require('lspconfig')[server_name].setup(server)
+      --     end,
+      --   },
+      -- }
+
+      for server_name, config in pairs(servers) do
+        config.capabilities = vim.tbl_deep_extend('force', {}, capabilities, config.capabilities or {})
+        vim.lsp.config(server_name, config)
+        vim.lsp.enable(server_name)
+      end
     end,
   },
 
