@@ -756,7 +756,9 @@ require('lazy').setup({
 
         tailwindcss = {},
 
-        jedi_language_server = {},
+        -- jedi_language_server = {},
+
+        pyright = {},
 
         postgres_lsp = {},
 
@@ -813,6 +815,7 @@ require('lazy').setup({
         'tailwindcss-language-server',
         'azure-pipelines-language-server',
       })
+
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
     end,
   },
