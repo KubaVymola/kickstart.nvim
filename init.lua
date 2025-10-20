@@ -544,7 +544,7 @@ require('lazy').setup({
       end, { desc = 'Search [F]iles' })
       vim.keymap.set('n', '<leader>fs', builtin.builtin, { desc = 'Search Select Telescope' })
       vim.keymap.set('n', '<leader>fw', builtin.grep_string, { desc = 'Search current [W]ord' })
-      vim.keymap.set('n', '<leader>fg', ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>")
+      vim.keymap.set('n', '<leader>fg', ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", { desc = 'Search by [G]rep' })
       -- vim.keymap.set('n', '<leader>fg', function()
       -- builtin.live_grep { path_display = { truncate = 3 } }
       -- end, { desc = 'Search by [G]rep' })
