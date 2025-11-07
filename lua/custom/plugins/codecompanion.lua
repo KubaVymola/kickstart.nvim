@@ -64,31 +64,22 @@ return {
     },
     adapters = {
       http = {
-        -- anthropic = function()
-        --   return require("codecompanion.adapters").extend("anthropic", {
-        --     env = {
-        --       api_key = "cmd:op read op://personal/Anthropic_API/credential --no-newline",
-        --     },
-        --   })
-        -- end,
         -- copilot = function()
-        --   return require("codecompanion.adapters").extend("copilot", {
+        --   return require('codecompanion.adapters').extend('copilot', {
         --     schema = {
         --       model = {
-        --         default = "gemini-2.5-pro",
+        --         default = 'gemini-2.5-pro',
         --       },
-        --     },
-        --   })
-        -- end,
-        -- deepseek = function()
-        --   return require("codecompanion.adapters").extend("deepseek", {
-        --     env = {
-        --       api_key = "cmd:op read op://personal/DeepSeek_API/credential --no-newline",
         --     },
         --   })
         -- end,
         gemini = function()
           return require('codecompanion.adapters').extend('gemini', {
+            schema = {
+              model = {
+                default = 'gemini-2.5-pro',
+              },
+            },
             url = 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
             env = {
               api_key = 'cmd:cat ~/.gemini-key-local',
@@ -99,70 +90,6 @@ return {
             },
           })
         end,
-        -- mistral = function()
-        --   return require("codecompanion.adapters").extend("mistral", {
-        --     env = {
-        --       api_key = "cmd:op read op://personal/Mistral_API/credential --no-newline",
-        --     },
-        --   })
-        -- end,
-        -- novita = function()
-        --   return require("codecompanion.adapters").extend("novita", {
-        --     env = {
-        --       api_key = "cmd:op read op://personal/Novita_API/credential --no-newline",
-        --     },
-        --     schema = {
-        --       model = {
-        --         default = function()
-        --           return "meta-llama/llama-3.1-8b-instruct"
-        --         end,
-        --       },
-        --     },
-        --   })
-        -- end,
-        -- ollama = function()
-        --   return require("codecompanion.adapters").extend("ollama", {
-        --     schema = {
-        --       model = {
-        --         default = "llama3.1:latest",
-        --       },
-        --       num_ctx = {
-        --         default = 20000,
-        --       },
-        --     },
-        --   })
-        -- end,
-        -- openai = function()
-        --   return require("codecompanion.adapters").extend("openai", {
-        --     opts = {
-        --       stream = true,
-        --     },
-        --     env = {
-        --       api_key = "cmd:op read op://personal/OpenAI_API/credential --no-newline",
-        --     },
-        --     schema = {
-        --       model = {
-        --         default = function()
-        --           return "gpt-4.1"
-        --         end,
-        --       },
-        --     },
-        --   })
-        -- end,
-        -- xai = function()
-        --   return require("codecompanion.adapters").extend("xai", {
-        --     env = {
-        --       api_key = "cmd:op read op://personal/xAI_API/credential --no-newline",
-        --     },
-        --   })
-        -- end,
-        -- tavily = function()
-        --   return require("codecompanion.adapters").extend("tavily", {
-        --     env = {
-        --       api_key = "cmd:op read op://personal/Tavily_API/credential --no-newline",
-        --     },
-        --   })
-        -- end,
       },
     },
     prompt_library = {
@@ -243,6 +170,12 @@ return {
         },
       },
       inline = {
+        adapter = {
+          name = 'gemini',
+          model = 'gemini-2.5-pro',
+        },
+      },
+      cmd = {
         adapter = {
           name = 'gemini',
           model = 'gemini-2.5-pro',
