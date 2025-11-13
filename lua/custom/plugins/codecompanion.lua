@@ -73,6 +73,18 @@ return {
         --     },
         --   })
         -- end,
+        anthropic = function()
+          return require('codecompanion.adapters').extend('anthropic', {
+            schema = {
+              model = {
+                default = 'claude-sonnet-4.5',
+              },
+              env = {
+                api_key = 'cmd:cat ~/.claude-key-local',
+              },
+            },
+          })
+        end,
         gemini = function()
           return require('codecompanion.adapters').extend('gemini', {
             schema = {
