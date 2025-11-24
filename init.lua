@@ -213,7 +213,7 @@ vim.keymap.set('n', '|', '<cmd>vsplit<CR>', { desc = 'Split current window verti
 
 vim.api.nvim_set_keymap('n', '<leader>l', ':ls<CR>:b<space>', { desc = 'fly to buffer' })
 
-vim.api.nvim_create_user_command('CopyRelPath', "call setreg('+', expand('%'))", {})
+vim.api.nvim_create_user_command('CopyRelPath', "call setreg('+', expand('%:.'))", {})
 
 vim.cmd 'set autoread | au CursorHold * checktime'
 

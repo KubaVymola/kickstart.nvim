@@ -89,7 +89,7 @@ return {
           return require('codecompanion.adapters').extend('gemini', {
             schema = {
               model = {
-                default = 'gemini-2.5-pro',
+                default = 'gemini-3-pro-preview',
               },
             },
             url = 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
@@ -129,7 +129,7 @@ return {
       chat = {
         adapter = {
           name = 'gemini',
-          model = 'gemini-2.5-pro',
+          model = 'gemini-3-pro-preview',
         },
         keymaps = {
           send = {
