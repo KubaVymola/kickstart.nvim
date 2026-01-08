@@ -481,6 +481,8 @@ require('lazy').setup({
             '--glob=!**/coverage',
             '--glob=!**/.turbo',
             '--glob=!**/*.log*',
+            '--glob=!**/.svelte-kit',
+            '--glob=!**/cdk.out',
           },
         },
         pickers = {
@@ -506,6 +508,8 @@ require('lazy').setup({
               '--glob=!**/coverage',
               '--glob=!**/.turbo',
               '--glob=!**/*.log*',
+              '--glob=!**/*.svelte-kit*',
+              '--glob=!**/cdk.out',
             },
           },
         },
