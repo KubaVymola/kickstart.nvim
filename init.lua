@@ -856,24 +856,22 @@ require('lazy').setup({
         ts_ls = {},
         eslint = {},
         jsonls = {},
-
-        prismals = {},
-
-        tailwindcss = {},
-
+        yamlls = {},
+        gh_actions_ls = {},
+        azure_pipelines_ls = {},
+        --
         -- jedi_language_server = {},
 
         pyright = {},
-
-        postgres_lsp = {},
-
+        prismals = {},
+        tailwindcss = {},
         svelte = {
           -- root_dir = require('lspconfig.util').root_pattern '.git',
         },
-
         astro = {},
-
-        azure_pipelines_ls = {},
+        postgres_lsp = {},
+        dockerls = {},
+        docker_compose_language_service = {},
 
         lua_ls = {
           -- cmd = { ... },
@@ -913,6 +911,8 @@ require('lazy').setup({
         'svelte-language-server',
         'tailwindcss-language-server',
         'azure-pipelines-language-server',
+        'dockerfile-language-server',
+        'docker-compose-language-service',
       })
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
