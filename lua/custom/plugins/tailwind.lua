@@ -1,5 +1,6 @@
 return {
-  'luckasRanarison/tailwind-tools.nvim',
+  'garrett-hopper/tailwind-tools.nvim',
+  branch = 'vim-lsp-api',
   name = 'tailwind-tools',
   build = ':UpdateRemotePlugins',
   dependencies = {
