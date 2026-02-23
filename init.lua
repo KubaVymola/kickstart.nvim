@@ -211,6 +211,11 @@ vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower win
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 vim.keymap.set('n', '|', '<cmd>vsplit<CR>', { desc = 'Split current window vertically' })
 
+vim.keymap.set('n', '-', [[<cmd>vertical resize +5<cr>]]) -- make the window biger vertically
+vim.keymap.set('n', '_', [[<cmd>vertical resize -5<cr>]]) -- make the window smaller vertically
+vim.keymap.set('n', '–', [[<cmd>horizontal resize +2<cr>]]) -- make the window bigger horizontally by pressing shift and =
+vim.keymap.set('n', '—', [[<cmd>horizontal resize -2<cr>]]) -- make the window smaller horizontally by pressing shift and -
+
 vim.api.nvim_set_keymap('n', '<leader>l', ':ls<CR>:b<space>', { desc = 'fly to buffer' })
 
 vim.api.nvim_create_user_command('CopyRelPath', "call setreg('+', expand('%:.'))", {})
@@ -955,7 +960,7 @@ require('lazy').setup({
       },
     },
     opts = {
-      notify_on_error = false,
+      notify_on_error = true,
       format_on_save = function(bufnr)
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
@@ -976,6 +981,7 @@ require('lazy').setup({
         -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
+        svelte = { 'prettier', stop_after_first = false },
         javascript = { 'prettierd', 'prettier', stop_after_first = true },
         typescript = { 'prettierd', 'prettier', stop_after_first = true },
         astro = { 'prettierd', 'prettier', stop_after_first = true },
