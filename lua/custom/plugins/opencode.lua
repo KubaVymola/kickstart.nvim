@@ -40,8 +40,8 @@ return {
       --   require('opencode').toggle()
       -- end, { desc = 'Toggle opencode' })
 
-      vim.keymap.set({ 'n', 't' }, '<leader>o', '<Nop>', { desc = '+opencode' })
-      vim.keymap.set({ 'n', 't' }, '<leader>oo', function()
+      vim.keymap.set({ 'n', 'x' }, '<leader>o', '<Nop>', { desc = '+opencode' })
+      vim.keymap.set({ 'n', 'x' }, '<leader>oo', function()
         require('opencode').toggle()
       end, { desc = 'Toggle open code' })
 
