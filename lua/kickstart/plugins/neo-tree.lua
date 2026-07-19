@@ -33,9 +33,36 @@ return {
       },
     },
     window = {
+      width = 60,
       mappings = {
         ['l'] = 'open',
         ['h'] = 'close_node',
+      },
+    },
+    default_component_configs = {
+      -- If you don't want to use these columns, you can set `enabled = false` for each of them individually
+      file_size = {
+        enabled = false,
+        width = 12, -- width of the column
+        required_width = 64, -- min width of window required to show this column
+      },
+      type = {
+        enabled = false,
+        width = 10, -- width of the column
+        required_width = 122, -- min width of window required to show this column
+      },
+      last_modified = {
+        enabled = false,
+        width = 20, -- width of the column
+        required_width = 88, -- min width of window required to show this column
+      },
+      created = {
+        enabled = false,
+        width = 20, -- width of the column
+        required_width = 110, -- min width of window required to show this column
+      },
+      symlink_target = {
+        enabled = false,
       },
     },
   },
