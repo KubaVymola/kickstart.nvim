@@ -1,7 +1,2 @@
-return {
-  {
-    'mawkler/refjump.nvim',
-    event = 'LspAttach', -- Uncomment to lazy load
-    opts = {},
-  },
-}
+vim.pack.add { 'https://github.com/mawkler/refjump.nvim' }
+require('refjump').setup {}
