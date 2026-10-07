@@ -4,37 +4,20 @@
 vim.pack.add {
   { src = 'https://github.com/nvim-neo-tree/neo-tree.nvim', version = vim.version.range '*' },
   'https://github.com/nvim-lua/plenary.nvim',
-  'https://github.com/nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
   'https://github.com/MunifTanjim/nui.nvim',
 }
 
 vim.keymap.set('n', '\\', '<Cmd>Neotree reveal<CR>', { desc = 'NeoTree reveal', silent = true })
 
 require('neo-tree').setup {
-  filesystem = {
-    use_libuv_file_watcher = true,
-    filtered_items = {
-      hide_dotfiles = false,
-      hide_gitignored = false,
-      never_show = {
-        '.DS_Store',
-        'thumbs.db',
-      },
-    },
-    window = {
-      mappings = {
-        ['\\'] = 'close_window',
-      },
-    },
-  },
-  window = {
-    width = 60,
-    mappings = {
-      ['l'] = 'open',
-      ['h'] = 'close_node',
-    },
-  },
   default_component_configs = {
+    name = {
+      -- Don't recolor the filename text based on git status (e.g. modified
+      -- files ending up the same color as directories); keep git status
+      -- shown via the status column/icons instead.
+      -- use_git_status_colors = false,
+      trailing_slash = true,
+    },
     -- If you don't want to use these columns, you can set `enabled = false` for each of them individually
     file_size = {
       enabled = false,
@@ -60,4 +43,25 @@ require('neo-tree').setup {
       enabled = false,
     },
   },
+  filesystem = {
+    use_libuv_file_watcher = true,
+    filtered_items = {
+      hide_dotfiles = false,
+      hide_gitignored = false,
+      never_show = {
+        '.DS_Store',
+        'thumbs.db',
+      },
+    },
+    window = {
+      width = 60,
+      mappings = {
+        ['\\'] = 'close_window',
+        ['l'] = 'open',
+        ['h'] = 'close_node',
+      },
+    },
+  },
 }
+
+-- vim.cmd 'highlight NeoTreeGitModified guifg=Red'

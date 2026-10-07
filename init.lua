@@ -462,12 +462,23 @@ do
   --
   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
   vim.pack.add { { src = gh 'catppuccin/nvim', name = 'catppuccin' } }
+  ---@diagnostic disable-next-line: missing-fields
+  require('catppuccin').setup {
+    integrations = {
+      blink_cmp = true,
+    },
+    custom_highlights = function(colors)
+      return {
+        NeoTreeGitModified = { fg = colors.lavender },
+      }
+    end,
+  }
 
   -- Load the colorscheme here.
   vim.cmd.colorscheme 'catppuccin-mocha'
 
   -- You can configure highlights by doing something like:
-  vim.cmd.hi 'Comment gui=none'
+  -- vim.cmd.hi 'Comment gui=none'
 
   vim.api.nvim_set_hl(0, 'LineNr', { fg = 'gray' })
   vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', { fg = 'gray' })
@@ -870,7 +881,7 @@ do
   ---@type table<string, vim.lsp.Config>
   local servers = {
     clangd = {},
-    -- gopls = {},
+    gopls = {},
     -- tsc = {},
     --
     -- Some languages (like rust) have entire language plugins that can be useful:
@@ -949,7 +960,10 @@ do
             checkThirdParty = false,
             -- NOTE: this is a lot slower and will cause issues when working on your own configuration.
             --  See https://github.com/neovim/nvim-lspconfig/issues/3189
-            library = vim.api.nvim_get_runtime_file('', true),
+            library = vim.tbl_extend('force', vim.api.nvim_get_runtime_file('', true), {
+              '${3rd}/luv/library',
+              '${3rd}/busted/library',
+            }),
           },
         })
       end,
