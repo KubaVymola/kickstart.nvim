@@ -1016,15 +1016,13 @@ do
   require('conform').setup {
     notify_on_error = true,
     format_on_save = function(bufnr)
-      -- You can specify filetypes to autoformat on save here:
-      local enabled_filetypes = {
-        -- lua = true,
-        -- python = true,
-      }
-      if enabled_filetypes[vim.bo[bufnr].filetype] then
-        return { timeout_ms = 500 }
-      else
+      -- Format on save everywhere except for languages that don't have a well standardized coding style.
+      -- You can add additional languages here or re-enable it for the disabled ones.
+      local disabled_filetypes = { c = true, cpp = true }
+      if disabled_filetypes[vim.bo[bufnr].filetype] then
         return nil
+      else
+        return { timeout_ms = 500 }
       end
     end,
     default_format_opts = {
@@ -1032,6 +1030,7 @@ do
     },
     -- You can also specify external formatters in here.
     formatters_by_ft = {
+      lua = { 'stylua' },
       -- rust = { 'rustfmt' },
       -- Conform can also run multiple formatters sequentially
       -- python = { "isort", "black" },
